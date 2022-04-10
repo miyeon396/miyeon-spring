@@ -20,18 +20,21 @@ public class AppConfig {
     @Bean //빈들은 스프링 컨테이너에 등록. 기본적으로 이름은 메서드 이름이 등록이 된다.
     public MemberService memberService() { //멤버 서비스를 여기서 만듦.
         //생성자 주입 방식으로 변경.
-        return new MemberServiceImpl(getMemberRepository());
+        System.out.println("call AppConfig.memberService");
+        return new MemberServiceImpl(memberRepository());
     }
 
     @Bean
-    public MemoryMemberRepository getMemberRepository() {
+    public MemoryMemberRepository memberRepository() {
         //나는 멤버 리포지토리 쓰는데 memoryMemberRepo쓸거야
+        System.out.println("call AppConfig.getMemberRepository");
         return new MemoryMemberRepository();
     }
 
     @Bean
     public OrderService orderService() { //구체적인 것은 여기서 결정.
-        return  new OrderServiceImpl(getMemberRepository(), discountPolicy());
+        System.out.println("call AppConfig.orderService");
+        return  new OrderServiceImpl(memberRepository(), discountPolicy());
     }
 
     @Bean
