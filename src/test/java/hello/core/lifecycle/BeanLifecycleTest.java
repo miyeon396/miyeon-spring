@@ -16,7 +16,7 @@ public class BeanLifecycleTest {
 
     @Configuration
     static class LifeCycleConfig {
-        @Bean
+        @Bean(initMethod = "init", destroyMethod = "close")
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient(); //스프링 빈 등록할 때 생성자 호출 하겠죠
             networkClient.setUrl("http://hello-spring.dev"); //외부에서 값을 세팅하고 나서 초기화를 해줘야함... 수정자 주입을 통해서 주입
