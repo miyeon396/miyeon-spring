@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Provider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,10 +41,10 @@ public class SingletonWithPrototypeTest1 {
     @Scope("singleton")
     static class ClientBean { //일단 clietbean은 싱글톤. 싱글톤 빈이면 저위에서 30번줄에서 등록했기 떄문에 자동으로 등록됨.
         @Autowired
-        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+        private Provider<PrototypeBean> prototypeBeanProvider;
 
         public int logic() {
-            PrototypeBean prototypeBean = prototypeBeanProvider.getObject(); //getObject호출하면 걔가 그때서야 컨테이너에서 찾아서 반환해주는 것. -> 직접 우리가 찾는게 아니라 얘가 찾아주는 기능만 제공
+            PrototypeBean prototypeBean = prototypeBeanProvider.get(); //getObject호출하면 걔가 그때서야 컨테이너에서 찾아서 반환해주는 것. -> 직접 우리가 찾는게 아니라 얘가 찾아주는 기능만 제공
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
