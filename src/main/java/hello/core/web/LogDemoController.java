@@ -14,13 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 public class LogDemoController {
 
     private final LogDemoService logDemoService;
-    private final ObjectProvider<MyLogger> myLoggerProvider; //이렇게 하면 myLogger을 주입 받는게 아니라 myLogger을 찾을 수 있는애들 DependencyLookup하게됨
+    private final MyLogger myLogger; //이렇게 하면 myLogger을 주입 받는게 아니라 myLogger을 찾을 수 있는애들 DependencyLookup하게됨
 
     @RequestMapping("log-demo")
     @ResponseBody
     public String logDemo(HttpServletRequest request) {
-        MyLogger myLogger = myLoggerProvider.getObject();
         String requestURL = request.getRequestURL().toString();
+
+        System.out.println("myLogger = "+myLogger.getClass());
         myLogger.setRequestURL(requestURL);
 
         myLogger.log("controller test");
