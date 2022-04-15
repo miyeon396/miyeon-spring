@@ -1,6 +1,7 @@
 package hello.core.scope;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
@@ -34,19 +35,15 @@ public class SingletonWithPrototypeTest1 {
 
         ClientBean clientBean2 = ac.getBean(ClientBean.class);
         int count2 = clientBean2.logic();
-        assertThat(count2).isEqualTo(2);
+        assertThat(count2).isEqualTo(1);
     }
     @Scope("singleton")
     static class ClientBean { //일단 clietbean은 싱글톤. 싱글톤 빈이면 저위에서 30번줄에서 등록했기 떄문에 자동으로 등록됨.
-        private final PrototypeBean prototypeBean;//의존성 주입 받을거임 -> 생성시점에 주입이 되어 있음. 계속 같은 것.
-
-        @Autowired //생성자 autowired가 있음. 그러면 프로토타입 빈 내놔. 이떄 요청함 이떄 스프링 컨테이너가 만들어서 던져줌,
-        public ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-
-        }
+        @Autowired
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
 
         public int logic() {
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject(); //getObject호출하면 걔가 그때서야 컨테이너에서 찾아서 반환해주는 것. -> 직접 우리가 찾는게 아니라 얘가 찾아주는 기능만 제공
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
